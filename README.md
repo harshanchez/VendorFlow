@@ -4,6 +4,16 @@ VendorFlow is a form-first, deterministic vendor-onboarding demonstration for th
 
 It is not a GSTN, PAN, IFSC, bank, legal, identity, or sanctions verification product. The PDF upload is optional; a form-only happy path is approved without one. Gemini is deliberately not implemented in P0 and `GEMINI_ENABLED=false` remains the default.
 
+## Workflow diagram
+
+[`docs/VendorFlow_workflow.pdf`](docs/VendorFlow_workflow.pdf) is a one-page, print-ready map of the whole product: intake, the seven pipeline stages, the decision rules in precedence order, the three statuses with their reason codes, storage, the UI surfaces, and the five-minute demo path.
+
+It is generated rather than hand-drawn, so it cannot drift from the code:
+
+```powershell
+python scripts/make_workflow_pdf.py
+```
+
 ## Run locally
 
 Use Python 3.14 where available (3.12–3.14 is supported by the app logic):
@@ -47,13 +57,13 @@ Every spot-check vendor also has two bundled optional PDFs: a matching one (same
 
 ## Optional PDF fixtures
 
-The form remains the primary workflow. To generate the two small, fictional PDFs used for the document-consistency demo, run:
+The form remains the primary workflow. Each spot-check vendor ships two fictional PDFs — a matching one and a conflicting one — so document consistency can be demonstrated on any vendor without inventing a file on stage. To regenerate all 22 fixtures:
 
 ```powershell
 python scripts/make_demo_pdfs.py
 ```
 
-In **New run**, select either bundled PDF. The matching document remains Approved; the intentionally conflicting GSTIN document becomes Pending with `DOCUMENT_VS_FIELDS`.
+In **New run**, load a vendor and then pick either of its bundled PDFs. The matching document leaves the decision unchanged; the conflicting GSTIN document becomes Pending with `DOCUMENT_VS_FIELDS`.
 
 ## Supabase (optional persistence)
 
